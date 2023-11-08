@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drive List</title>
+</head>
+<body>
+    <h1>Drive List</h1>
+    <ul>
+        {% for drive in drives %}
+            <li><a href="{% url 'drive_content' drive.id %}">{{ drive.name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

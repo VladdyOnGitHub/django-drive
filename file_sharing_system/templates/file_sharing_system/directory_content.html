@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Directory Content</title>
+</head>
+<body>
+    <h1>Directory Content</h1>
+    <h2>Directory ID: {{ directory_id }}</h2>
+    <ul>
+        {% for subdirectory in subdirectories %}
+            <li><a href="{% url 'directory_content' subdirectory.id %}">{{ subdirectory.name }}</a></li>
+        {% endfor %}
+        {% for file in files %}
+            <li><a href="{% url 'file_content' file.id %}">{{ file.name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

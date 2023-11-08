@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drive Content</title>
+</head>
+<body>
+    <h1>Drive Content</h1>
+    <h2>Drive ID: {{ drive_id }}</h2>
+
+    <h3>Directories:</h3>
+    <ul>
+        {% for directory in directories %}
+            <li><a href="{% url 'directory_content' directory.id %}">{{ directory.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h3>Files:</h3>
+    <ul>
+        {% for file in files %}
+            <li><a href="{% url 'file_content' file.id %}">{{ file.name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
