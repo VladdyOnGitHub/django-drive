@@ -6,9 +6,14 @@
 <body>
     <h1>Drive List</h1>
     <ul>
-        {% for drive in drives %}
-            <li><a href="{% url 'drive_content' drive.id %}">{{ drive.name }}</a></li>
-        {% endfor %}
-    </ul>
+    {% for drive in drives %}
+        <li>
+            <a href="{% url 'drive_content' drive.id %}">{{ drive.name }}</a>
+            {% if user.is_superuser %}
+                (Owner: {{ drive.owner.username }})
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
 </body>
 </html>
