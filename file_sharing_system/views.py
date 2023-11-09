@@ -63,6 +63,7 @@ def directory_content(request, directory_id):
 
     return render(request, 'file_sharing_system/directory_content.html', {
         'directory_id': directory_id,
+        'directory': directory,
         'subdirectories': subdirectories,
         'files': files,
     })

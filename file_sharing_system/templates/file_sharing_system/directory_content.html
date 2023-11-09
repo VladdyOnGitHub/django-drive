@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Directory Content</h1>
-    <h2>Directory ID: {{ directory_id }}</h2>
+    <h2>Directory Name: {{ directory.name }}</h2>
     <ul>
         {% for subdirectory in subdirectories %}
             <li><a href="{% url 'directory_content' subdirectory.id %}">{{ subdirectory.name }}</a></li>

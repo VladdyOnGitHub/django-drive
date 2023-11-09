@@ -117,7 +117,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-LOGIN_REDIRECT_URL = '/'  # Change this URL to your desired redirect location
+LOGIN_REDIRECT_URL = '/'  # redirect location after logging in
+LOGIN_URL = '/login/'   # redirect if not logged in
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

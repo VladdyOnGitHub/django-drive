@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 
 class Drive(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -10,6 +12,7 @@ class Drive(models.Model):
 
 
 class Directory(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     drive = models.ForeignKey(Drive, on_delete=models.CASCADE)
     parent_directory = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
@@ -18,6 +21,7 @@ class Directory(models.Model):
 
 
 class File(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     drive = models.ForeignKey(Drive, on_delete=models.CASCADE)
     directory = models.ForeignKey(Directory, null=True, blank=True, on_delete=models.CASCADE)
