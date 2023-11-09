@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Drive, Directory, File
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
+from .forms import RenameForm, EditFileForm
 
 
 def custom_login(request):
@@ -84,3 +85,60 @@ def file_content(request, file_id):
         'parent_directory_id': parent_directory.id
     })
 
+
+@login_required
+def rename_drive(request, drive_id):
+    drive = get_object_or_404(Drive, id=drive_id)
+    if request.method == 'POST':
+        form = RenameForm(request.POST)
+        if form.is_valid():
+            new_name = form.cleaned_data['new_name']
+            drive.rename(new_name)
+    else:
+        form = RenameForm(initial={'new_name': drive.name})
+
+    return render(request, 'file_sharing_system/rename_drive.html', {
+        'form': form,
+        'drive': drive
+    })
+
+
+@login_required
+def rename_directory(request, directory_id):
+    directory = get_object_or_404(Directory, id=directory_id)
+    if request.method == 'POST':
+        form = RenameForm(request.POST)
+        if form.is_valid():
+            new_name = form.cleaned_data['new_name']
+            directory.rename(new_name)
+    else:
+        form = RenameForm(initial={'new_name': directory.name})
+
+    return render(request, 'file_sharing_system/rename_directory.html', {
+        'form': form,
+        'directory': directory
+    })
+
+
+@login_required
+def edit_file(request, file_id):
+    file = get_object_or_404(File, id=file_id)
+    if request.method == 'POST':
+        form = EditFileForm(request.POST)
+        if form.is_valid():
+            new_name = form.cleaned_data['new_name']
+            new_content = form.cleaned_data['new_content']
+            file.edit_content(new_content)
+
+            if new_name:
+                file.rename(new_name)
+            elif new_content:
+                file.edit_content(new_content)
+
+    else:
+        form = EditFileForm(initial={'new_name': file.name, 'new_content': file.content})
+
+    return render(request, 'file_sharing_system/edit_file.html', {
+        'form': form,
+        'file': file
+    })

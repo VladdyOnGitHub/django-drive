@@ -7,6 +7,7 @@
     <h1>File Content</h1>
     <h2>File Name: {{ file.name }}</h2>
     <p>File ID: {{ file_id }}</p>
+    <p>File Content: {{ file.content }}</p>
     <!-- Add more details as needed -->
 
     {% if file.directory.id %}
@@ -14,5 +15,7 @@
     {% else %}
         <a href="{% url 'drive_content' file.drive.id %}">Back to Drive</a>
     {% endif %}
+
+    <p><a href="{% url 'edit_file' file.id %}">Edit File: {{ file.name }}</a></p>
 </body>
 </html>

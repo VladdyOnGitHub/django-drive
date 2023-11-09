@@ -20,5 +20,7 @@
             <li><a href="{% url 'file_content' file.id %}">{{ file.name }}</a></li>
         {% endfor %}
     </ul>
+
+    <p><a href="{% url 'rename_drive' drive.id %}">Rename Drive: {{ drive.name }}</a></p>
 </body>
 </html>
