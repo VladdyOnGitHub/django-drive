@@ -8,16 +8,25 @@
     <h2>Drive Name: {{ drive.name }}</h2>
 
     <h3>Directories:</h3>
+        <a href="{% url 'add_directory' drive.id %}">Add Directory</a>
     <ul>
         {% for directory in directories %}
-            <li><a href="{% url 'directory_content' directory.id %}">{{ directory.name }}</a></li>
+            <li>
+                <a href="{% url 'directory_content' directory.id %}">{{ directory.name }}</a>
+                <a href="{% url 'add_file' drive.id directory.id %}">Add File</a>
+                <a href="{% url 'delete_directory' directory.id %}">Delete</a>
+            </li>
+
         {% endfor %}
     </ul>
 
     <h3>Files:</h3>
     <ul>
         {% for file in files %}
-            <li><a href="{% url 'file_content' file.id %}">{{ file.name }}</a></li>
+            <li>
+                <a href="{% url 'file_content' file.id %}">{{ file.name }}</a>
+                <a href="{% url 'delete_file' file.id %}">Delete</a>
+            </li>
         {% endfor %}
     </ul>
 

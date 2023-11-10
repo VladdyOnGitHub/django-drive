@@ -1,0 +1,8 @@
+{% block content %}
+  <h2>Delete Directory</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.directory_id }}
+    <button type="submit">Delete Directory</button>
+  </form>
+{% endblock %}

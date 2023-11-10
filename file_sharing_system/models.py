@@ -14,12 +14,29 @@ class Drive(models.Model):
         self.name = new_name
         self.save()
 
+    def add_directory(self, name):
+        return self.directories.create(name=name)
+
+    def add_file(self, name, content, directory=None):
+        if directory:
+            return directory.files.create(name=name, content=content, drive=self)
+        else:
+            return self.files.create(name=name, content=content)
+
+    def delete_item(self, item_id):
+        try:
+            item = self.directories.get(id=item_id)
+        except Directory.DoesNotExist:
+            item = self.files.get(id=item_id)
+
+        item.delete()
+
 
 class Directory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    drive = models.ForeignKey(Drive, on_delete=models.CASCADE)
-    parent_directory = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
+    drive = models.ForeignKey(Drive, related_name='directories', on_delete=models.CASCADE)
+    parent_directory = models.ForeignKey('self', null=True, blank=True, related_name='subdirectories', on_delete=models.CASCADE)
 
     objects = models.Manager()
 
@@ -31,8 +48,8 @@ class Directory(models.Model):
 class File(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    drive = models.ForeignKey(Drive, on_delete=models.CASCADE)
-    directory = models.ForeignKey(Directory, null=True, blank=True, on_delete=models.CASCADE)
+    drive = models.ForeignKey(Drive, related_name='files', on_delete=models.CASCADE)
+    directory = models.ForeignKey(Directory, null=True, blank=True, related_name='files', on_delete=models.CASCADE)
 
     content = models.TextField(default="")
 

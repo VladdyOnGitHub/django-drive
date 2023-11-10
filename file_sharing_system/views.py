@@ -1,11 +1,12 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Drive, Directory, File
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-from django.contrib.auth import login
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import render, redirect
-from .forms import RenameForm, EditFileForm
+from .forms import RenameForm, EditFileForm, AddDirectoryForm, AddFileForm, DeleteDirectoryForm, DeleteFileForm
+from .models import Drive, Directory, File
+from rest_framework import generics
+from .serializers import DriveSerializer, DirectorySerializer, FileSerializer
+from django.urls import reverse
 
 
 def custom_login(request):
@@ -59,8 +60,8 @@ def directory_content(request, directory_id):
     directory = Directory.objects.get(id=directory_id)
 
     # Retrieve its subdirectories and files
-    subdirectories = directory.directory_set.all()
-    files = directory.file_set.all()
+    subdirectories = directory.subdirectories.all()
+    files = directory.files.all()
 
     return render(request, 'file_sharing_system/directory_content.html', {
         'directory_id': directory_id,
@@ -76,8 +77,8 @@ def file_content(request, file_id):
     file = File.objects.get(id=file_id)
 
     parent_directory = file.directory if file.directory else file.drive
-    # You can read the file's content here if you have stored it,
-    # and then pass it to the template as 'file_content'
+    # read the file's content here if stored
+    # then pass to the template as 'file_content'
 
     return render(request, 'file_sharing_system/file_content.html', {
         'file_id': file_id,
@@ -142,3 +143,85 @@ def edit_file(request, file_id):
         'form': form,
         'file': file
     })
+
+
+class DriveList(generics.ListCreateAPIView):
+    queryset = Drive.objects.all()
+    serializer_class = DriveSerializer
+
+
+class DriveContent(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Drive.objects.all()
+    serializer_class = DriveSerializer
+
+
+class DirectoryContent(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Directory.objects.all()
+    serializer_class = DirectorySerializer
+
+
+class FileContent(generics.RetrieveUpdateDestroyAPIView):
+    queryset = File.objects.all()
+    serializer_class = FileSerializer
+
+
+@login_required
+def add_directory(request, drive_id):
+    drive = get_object_or_404(Drive, id=drive_id)
+    if request.method == 'POST':
+        form = AddDirectoryForm(request.POST)
+        if form.is_valid():
+            new_directory = drive.add_directory(form.cleaned_data['name'])
+            return redirect(reverse('drive_content', kwargs={'drive_id': drive.id}))
+    else:
+        form = AddDirectoryForm()
+
+    return render(request, 'file_sharing_system/add_directory.html', {'form': form, 'drive': drive})
+
+
+@login_required
+def add_file(request, drive_id, directory_id=None):
+    drive = get_object_or_404(Drive, id=drive_id)
+    directory = get_object_or_404(Directory, id=directory_id) if directory_id else None
+
+    if request.method == 'POST':
+        form = AddFileForm(request.POST)
+        if form.is_valid():
+            new_file = drive.add_file(form.cleaned_data['name'], form.cleaned_data['content'], directory)
+            return redirect(reverse('drive_content', kwargs={'drive_id': drive.id}))
+    else:
+        form = AddFileForm()
+
+    return render(request, 'file_sharing_system/add_file.html', {'form': form, 'drive': drive, 'directory': directory})
+
+
+@login_required
+def delete_directory(request, directory_id):
+    directory = get_object_or_404(Directory, id=directory_id)
+    drive_id = directory.drive.id
+
+    if request.method == 'POST':
+        form = DeleteDirectoryForm(request.POST)
+        if form.is_valid():
+            directory.delete()
+            return redirect('drive_content', drive_id=drive_id)
+    else:
+        form = DeleteDirectoryForm()
+
+    return render(request, 'file_sharing_system/delete_directory.html', {'form': form, 'drive_id': drive_id})
+
+
+@login_required
+def delete_file(request, file_id):
+    file = get_object_or_404(File, id=file_id)
+    drive_id = file.drive.id
+
+    if request.method == 'POST':
+        form = DeleteFileForm(request.POST)
+        if form.is_valid():
+            file.delete()
+            return redirect('drive_content', drive_id=drive_id)
+    else:
+        form = DeleteFileForm()
+
+    return render(request, 'file_sharing_system/delete_file.html', {'form': form, 'drive_id': drive_id})
