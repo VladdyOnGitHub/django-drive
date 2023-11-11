@@ -1,5 +1,5 @@
 from django import forms
-from .models import Directory, File
+from .models import Drive, Directory, File
 
 
 class RenameForm(forms.Form):
@@ -11,10 +11,22 @@ class EditFileForm(forms.Form):
     new_content = forms.CharField(widget=forms.Textarea, required=False)
 
 
+class DriveForm(forms.ModelForm):
+    class Meta:
+        model = Drive
+        fields = ['name', 'reader_access', 'public_access']
+
+
+class DirectoryForm(forms.ModelForm):
+    class Meta:
+        model = Directory
+        fields = ['name', 'reader_access', 'public_access']
+
+
 class AddDirectoryForm(forms.ModelForm):
     class Meta:
         model = Directory
-        fields = ['name']
+        fields = ['name', 'reader_access', 'public_access']
 
 
 class AddFileForm(forms.ModelForm):

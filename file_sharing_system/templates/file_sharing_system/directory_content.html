@@ -8,13 +8,15 @@
     <h2>Directory Name: {{ directory.name }}</h2>
     <ul>
         {% for subdirectory in subdirectories %}
-            <li><a href="{% url 'directory_content' subdirectory.id %}">{{ subdirectory.name }}</a></li>
+            <li>
+                <a href="{% url 'directory_content' subdirectory.id %}">{{ subdirectory.name }}</a>
+            </li>
+
         {% endfor %}
+
         {% for file in files %}
             <li><a href="{% url 'file_content' file.id %}">{{ file.name }}</a></li>
         {% endfor %}
     </ul>
-
-    <p><a href="{% url 'rename_directory' directory.id %}">Rename Directory: {{ directory.name }}</a></p>
 </body>
 </html>

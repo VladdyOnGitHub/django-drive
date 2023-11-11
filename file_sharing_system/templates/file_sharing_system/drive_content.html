@@ -14,9 +14,17 @@
             <li>
                 <a href="{% url 'directory_content' directory.id %}">{{ directory.name }}</a>
                 <a href="{% url 'add_file' drive.id directory.id %}">Add File</a>
-                <a href="{% url 'delete_directory' directory.id %}">Delete</a>
-            </li>
 
+                {% if has_reader_access %}
+                    <!-- Users with reader_access can only view directories, not edit or delete -->
+                {% else %}
+                    {% if user == drive.owner %}
+                        <!-- The directory owner can edit and delete the directory -->
+                        <a href="{% url 'edit-directory' drive.id directory.id %}">Edit</a>
+                        <a href="{% url 'delete_directory' directory.id %}">Delete</a>
+                    {% endif %}
+                {% endif %}
+            </li>
         {% endfor %}
     </ul>
 
@@ -25,11 +33,23 @@
         {% for file in files %}
             <li>
                 <a href="{% url 'file_content' file.id %}">{{ file.name }}</a>
-                <a href="{% url 'delete_file' file.id %}">Delete</a>
+
+                {% if has_reader_access %}
+                    <!-- Users with reader_access can only view files, not delete -->
+                {% else %}
+                    {% if user == drive.owner %}
+                        <!-- The file owner can delete the file -->
+                        <a href="{% url 'edit_file' file.id %}">Edit</a>
+                        <a href="{% url 'delete_file' file_id=file.id %}">Delete</a>
+                    {% endif %}
+                {% endif %}
             </li>
         {% endfor %}
     </ul>
 
-    <p><a href="{% url 'rename_drive' drive.id %}">Rename Drive: {{ drive.name }}</a></p>
+    {% if not has_reader_access and user == drive.owner %}
+        <!-- The drive owner can edit the drive -->
+        <a href="{% url 'edit-drive' drive.id %}">Edit Drive</a>
+    {% endif %}
 </body>
 </html>
