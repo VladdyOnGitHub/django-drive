@@ -14,6 +14,7 @@ urlpatterns = [
     path('api/files/<uuid:pk>/', views.FileContent.as_view(), name='file-content'),
     path('add_directory/<uuid:drive_id>/', views.add_directory, name='add_directory'),
     path('add_file/<uuid:drive_id>/<uuid:directory_id>/', views.add_file, name='add_file'),
+    path('add_file/<uuid:drive_id>/', views.add_file, name='add_file'),
     path('delete_directory/<uuid:pk>/', views.delete_directory, name='delete_directory'),
     path('delete_file/<uuid:file_id>/', views.delete_file, name='delete_file'),
     path('edit_drive/<uuid:drive_id>/', views.edit_drive, name='edit-drive'),

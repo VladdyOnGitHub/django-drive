@@ -6,6 +6,7 @@
 <body>
     <h1>Directory Content</h1>
     <h2>Directory Name: {{ directory.name }}</h2>
+    <h3>Subdirectories:</h3>
     <ul>
         {% for subdirectory in subdirectories %}
             <li>
@@ -13,7 +14,9 @@
             </li>
 
         {% endfor %}
-
+    </ul>
+    <h3>Files:</h3>
+    <ul>
         {% for file in files %}
             <li><a href="{% url 'file_content' file.id %}">{{ file.name }}</a></li>
         {% endfor %}

@@ -24,11 +24,23 @@ class DirectoryForm(forms.ModelForm):
 
 
 class AddDirectoryForm(forms.ModelForm):
-    parent_directory = forms.ModelChoiceField(queryset=Directory.objects.all(), required=False, label='Parent Directory')
 
     class Meta:
         model = Directory
-        fields = ['name', 'reader_access', 'public_access']
+        fields = ['name', 'reader_access', 'public_access', 'parent_directory']
+
+    def __init__(self, current_drive, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Filter the queryset to include only directories in the current drive
+        self.fields['parent_directory'].queryset = Directory.objects.filter(drive=current_drive)
+        self.fields['parent_directory'].label_from_instance = lambda obj: obj.name if obj else 'Root Directory'
+
+    def clean_parent_directory(self):
+        parent_directory = self.cleaned_data['parent_directory']
+        if parent_directory and parent_directory.drive != self.instance.drive:
+            raise forms.ValidationError("Selected parent directory is not in the same drive.")
+        return parent_directory
 
 
 class AddFileForm(forms.ModelForm):

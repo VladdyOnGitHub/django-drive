@@ -46,6 +46,7 @@
             </li>
         {% endfor %}
     </ul>
+        <p><a href="{% url 'add_file' drive.id %}">Add File to Drive</a></p>
 
     {% if not has_reader_access and user == drive.owner %}
         <!-- The drive owner can edit the drive -->
