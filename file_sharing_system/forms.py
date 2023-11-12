@@ -24,6 +24,8 @@ class DirectoryForm(forms.ModelForm):
 
 
 class AddDirectoryForm(forms.ModelForm):
+    parent_directory = forms.ModelChoiceField(queryset=Directory.objects.all(), required=False, label='Parent Directory')
+
     class Meta:
         model = Directory
         fields = ['name', 'reader_access', 'public_access']

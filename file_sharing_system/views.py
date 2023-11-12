@@ -205,10 +205,15 @@ class FileContent(generics.RetrieveUpdateDestroyAPIView):
 @login_required
 def add_directory(request, drive_id):
     drive = get_object_or_404(Drive, id=drive_id)
+
     if request.method == 'POST':
         form = AddDirectoryForm(request.POST)
         if form.is_valid():
             new_directory = drive.add_directory(form.cleaned_data['name'])
+            parent_directory = form.cleaned_data['parent_directory']
+            if parent_directory:
+                new_directory.parent_directory = parent_directory
+                new_directory.save()
             return redirect(reverse('drive_content', kwargs={'drive_id': drive.id}))
     else:
         form = AddDirectoryForm()

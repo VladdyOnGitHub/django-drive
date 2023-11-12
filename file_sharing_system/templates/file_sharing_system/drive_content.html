@@ -51,5 +51,7 @@
         <!-- The drive owner can edit the drive -->
         <a href="{% url 'edit-drive' drive.id %}">Edit Drive</a>
     {% endif %}
+
+    <p><a href="{% url 'drive_list' %}">Back to Drives</a></p>
 </body>
 </html>

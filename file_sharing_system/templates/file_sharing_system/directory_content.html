@@ -18,5 +18,12 @@
             <li><a href="{% url 'file_content' file.id %}">{{ file.name }}</a></li>
         {% endfor %}
     </ul>
+
+    {% if directory.parent_directory %}
+        <p><a href="{% url 'directory_content' directory.parent_directory.id %}">Back to Parent Directory</a></p>
+    {% else %}
+    <!-- If no parent directory, provide a link to go back to the drive -->
+        <p><a href="{% url 'drive_content' drive_id=directory.drive.id %}">Back to Drive</a></p>
+    {% endif %}
 </body>
 </html>
