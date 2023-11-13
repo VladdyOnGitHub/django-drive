@@ -5,21 +5,23 @@
 </head>
 <body>
     <h1>Drive Content</h1>
-    <h2>Drive Name: {{ drive.name }}</h2>
+    <h2>{{ drive.name }}</h2>
 
     <h3>Directories:</h3>
+    {% if user == drive.owner %}
         <a href="{% url 'add_directory' drive.id %}">Add Directory</a>
+    {% endif %}
     <ul>
         {% for directory in directories %}
             <li>
-                <a href="{% url 'directory_content' directory.id %}">{{ directory.name }}</a>
-                <a href="{% url 'add_file' drive.id directory.id %}">Add File</a>
+                <button type="button" onclick="location.href='{% url 'directory_content' directory.id %}'">{{ directory.name }}</button>
 
                 {% if has_reader_access %}
                     <!-- Users with reader_access can only view directories, not edit or delete -->
                 {% else %}
                     {% if user == drive.owner %}
                         <!-- The directory owner can edit and delete the directory -->
+                        <a href="{% url 'add_file' drive.id directory.id %}">Add File</a>
                         <a href="{% url 'edit-directory' drive.id directory.id %}">Edit</a>
                         <a href="{% url 'delete_directory' directory.id %}">Delete</a>
                     {% endif %}
@@ -32,7 +34,7 @@
     <ul>
         {% for file in files %}
             <li>
-                <a href="{% url 'file_content' file.id %}">{{ file.name }}</a>
+                <button type="button" onclick="location.href='{% url 'file_content' file.id %}'">{{ file.name }}</button>
 
                 {% if has_reader_access %}
                     <!-- Users with reader_access can only view files, not delete -->
@@ -46,13 +48,13 @@
             </li>
         {% endfor %}
     </ul>
-        <p><a href="{% url 'add_file' drive.id %}">Add File to Drive</a></p>
 
     {% if not has_reader_access and user == drive.owner %}
         <!-- The drive owner can edit the drive -->
+        <p><a href="{% url 'add_file' drive.id %}">Add File to Drive</a></p>
         <a href="{% url 'edit-drive' drive.id %}">Edit Drive</a>
     {% endif %}
 
-    <p><a href="{% url 'drive_list' %}">Back to Drives</a></p>
+    <p><button type="button" onclick="location.href='{% url 'drive_list' %}'">Back to Drives List</button></p>
 </body>
 </html>

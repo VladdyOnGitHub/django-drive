@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('file_sharing_system', '0005_alter_directory_id_alter_drive_id_alter_file_id'),
+        ("file_sharing_system", "0005_alter_directory_id_alter_drive_id_alter_file_id"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='file',
-            name='content',
-            field=models.TextField(default=''),
+            model_name="file",
+            name="content",
+            field=models.TextField(default=""),
         ),
     ]

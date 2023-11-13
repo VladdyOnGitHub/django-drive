@@ -11,9 +11,9 @@
     <!-- Add more details as needed -->
 
     {% if file.directory.id %}
-        <a href="{% url 'directory_content' file.directory.id %}">Back to Parent Directory</a>
+        <button type="button" onclick="location.href='{% url 'directory_content' file.directory.id %}'">Back to Parent Directory</button>
     {% else %}
-        <a href="{% url 'drive_content' file.drive.id %}">Back to Drive</a>
+        <button type="button" onclick="location.href='{% url 'drive_content' file.drive.id %}'">Back to Drive</button>
     {% endif %}
 </body>
 </html>

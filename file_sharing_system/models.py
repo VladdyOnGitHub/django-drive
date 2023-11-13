@@ -1,6 +1,7 @@
-from django.db import models
-from django.contrib.auth.models import User
 import uuid
+
+from django.contrib.auth.models import User
+from django.db import models
 
 
 class Drive(models.Model):
@@ -8,9 +9,16 @@ class Drive(models.Model):
     name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    reader_access = models.ManyToManyField(User, related_name='drives_with_reader_access', blank=True)
-    public_access = models.CharField(max_length=20, choices=[('private', 'Private'), ('public', 'Public'),
-                                                             ('hidden_public', 'Hidden Public')], default='private')
+    reader_access = models.ManyToManyField(User, related_name="drives_with_reader_access", blank=True)
+    public_access = models.CharField(
+        max_length=20,
+        choices=[
+            ("private", "Private"),
+            ("public", "Public"),
+            ("hidden_public", "Hidden Public"),
+        ],
+        default="private",
+    )
 
     objects = models.Manager()
 
@@ -39,12 +47,25 @@ class Drive(models.Model):
 class Directory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    drive = models.ForeignKey(Drive, related_name='directories', on_delete=models.CASCADE)
-    parent_directory = models.ForeignKey('self', null=True, blank=True, related_name='subdirectories', on_delete=models.CASCADE)
+    drive = models.ForeignKey(Drive, related_name="directories", on_delete=models.CASCADE)
+    parent_directory = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        related_name="subdirectories",
+        on_delete=models.CASCADE,
+    )
 
-    reader_access = models.ManyToManyField(User, related_name='directories_with_reader_access', blank=True)
-    public_access = models.CharField(max_length=20, choices=[('private', 'Private'), ('public', 'Public'),
-                                                             ('hidden_public', 'Hidden Public')], default='private')
+    reader_access = models.ManyToManyField(User, related_name="directories_with_reader_access", blank=True)
+    public_access = models.CharField(
+        max_length=20,
+        choices=[
+            ("private", "Private"),
+            ("public", "Public"),
+            ("hidden_public", "Hidden Public"),
+        ],
+        default="private",
+    )
     objects = models.Manager()
 
     def rename(self, new_name):
@@ -55,8 +76,8 @@ class Directory(models.Model):
 class File(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    drive = models.ForeignKey(Drive, related_name='files', on_delete=models.CASCADE)
-    directory = models.ForeignKey(Directory, null=True, blank=True, related_name='files', on_delete=models.CASCADE)
+    drive = models.ForeignKey(Drive, related_name="files", on_delete=models.CASCADE)
+    directory = models.ForeignKey(Directory, null=True, blank=True, related_name="files", on_delete=models.CASCADE)
 
     content = models.TextField(default="")
 
