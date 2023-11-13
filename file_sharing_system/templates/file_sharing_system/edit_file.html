@@ -1,0 +1,13 @@
+  <h2>Edit File</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Changes</button>
+  </form>
+
+  <hr>
+
+  <h3>Current Content:</h3>
+  <pre>{{ file.content }}</pre>
+
+  <p><a href="{% url 'file_content' file.id %}">Back to File: {{ file.name }}</a></p>

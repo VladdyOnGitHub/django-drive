@@ -117,7 +117,7 @@ Level 3:
 
 - Expose models in a REST API using [Django REST framework](https://www.django-rest-framework.org/). You must support Basic authentication.
 - `CRUD`: Make it possible to add and delete items on drives that you own in the frontend.
-- `reader_access`: Make it possible to assign reader access to your a `Drive` or `Directory` for other users.
+- `reader_access`: Make it possible to assign reader access to your `Drive` or `Directory` for other users.
 - `public_access`: Make it possible to mark a `Drive` and/or `Directory` as _Private_, _Public_ or _Hidden public_.
   Rules:
   - _Public_ means that anyone can view the content and see it in the listing.

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Content</title>
+</head>
+<body>
+    <h1>File Content</h1>
+    <h2>File Name: {{ file.name }}</h2>
+    <p>File ID: {{ file_id }}</p>
+    <p>File Content: {{ file.content }}</p>
+    <!-- Add more details as needed -->
+
+    {% if file.directory.id %}
+        <button type="button" onclick="location.href='{% url 'directory_content' file.directory.id %}'">Back to Parent Directory</button>
+    {% else %}
+        <button type="button" onclick="location.href='{% url 'drive_content' file.drive.id %}'">Back to Drive</button>
+    {% endif %}
+</body>
+</html>

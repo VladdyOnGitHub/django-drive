@@ -1,0 +1,8 @@
+{% block content %}
+  <h2>Delete File</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.file_id }}
+    <button type="submit">Delete File</button>
+  </form>
+{% endblock %}

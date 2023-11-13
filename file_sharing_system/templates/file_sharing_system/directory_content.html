@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Directory Content</title>
+</head>
+<body>
+    <h1>Directory Content</h1>
+    <h2>{{ directory.name }}</h2>
+    <h3>Subdirectories:</h3>
+    <ul>
+        {% for subdirectory in subdirectories %}
+            <li>
+                <button type="button" onclick="location.href='{% url 'directory_content' subdirectory.id %}'">{{ subdirectory.name }}</button>
+            </li>
+
+        {% endfor %}
+    </ul>
+    <h3>Files:</h3>
+    <ul>
+        {% for file in files %}
+            <li>
+                <button type="button" onclick="location.href='{% url 'file_content' file.id %}'">{{ file.name }}</button>
+            </li>
+
+        {% endfor %}
+    </ul>
+
+    {% if directory.parent_directory %}
+        <button type="button" onclick="location.href='{% url 'directory_content' directory.parent_directory.id %}'">Back to Parent Directory</button>
+    {% else %}
+    <!-- If no parent directory, provide a link to go back to the drive -->
+        <button type="button" onclick="location.href='{% url 'drive_content' drive_id=directory.drive.id %}'">Back to Drive</button>
+    {% endif %}
+</body>
+</html>
